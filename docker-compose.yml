@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/nginx_log:/var/log/nginx
+      - ./docker/php/php-fpm/php-fpm.log:/var/log/php-fpm.log
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - php
+    networks:
+      - app-network
+
+  php:
+    build:
+      context: ./docker/php
+    ports:
+      - "8001:80"    
+    environment:
+      - DB_PORT=3306
+      - DB_HOST=mysql
+      # - DB_HOST=host.docker.internal
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    build:
+      context: ./docker/mysql
+    ports:
+      - "5554:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=social_media
+      - MYSQL_ROOT_PASSWORD=admin
+    expose:
+      - 3306
+    networks:
+      - app-network
+
+  phpmyadmin:
+    build:
+      context: ./docker/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data: {}
