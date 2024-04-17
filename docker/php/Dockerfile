@@ -30,15 +30,58 @@
 # # ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 
+# FROM php:8-fpm
+
+# # Set working directory
+# WORKDIR /var/www/html
+
+# # Copy existing application directory contents
+# COPY . /var/www/html
+
+# # Install dependencies
+# RUN apt-get update && apt-get install -y \
+#     build-essential \
+#     libpng-dev \
+#     libjpeg62-turbo-dev \
+#     libfreetype6-dev \
+#     locales \
+#     zip \
+#     jpegoptim optipng pngquant gifsicle \
+#     vim \
+#     unzip \
+#     git \
+#     curl
+
+
+# # Clear cache
+# RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# # Install composer
+# RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# # Add user for laravel application
+# RUN groupadd -g 1000 www
+# RUN useradd -u 1000 -ms /bin/bash -g www www
+
+# # Copy existing application directory permissions
+# COPY --chown=www:www . /var/www/html
+
+# # Set ownership for application files
+# RUN chown -R www:www /var/www/html
+
+# # Change current user to www
+# USER www
+
+# # Expose port 9000 and start php-fpm server
+# EXPOSE 9000
+# CMD ["php-fpm"]
 FROM php:8-fpm
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy existing application directory contents
-COPY . /var/www/html
-
-# Install dependencies
+# Install system dependencies
+USER root
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpng-dev \
@@ -50,28 +93,27 @@ RUN apt-get update && apt-get install -y \
     vim \
     unzip \
     git \
-    curl
+    curl \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install mysqli pdo pdo_mysql    
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Add user for laravel application
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# Install nodejs
+ENV NODE_VERSION=16.13.0
+RUN apt install -y curl \
+    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash \
+    && export NVM_DIR="/root/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+    && nvm install ${NODE_VERSION} \
+    && nvm use ${NODE_VERSION} \
+    && nvm alias default ${NODE_VERSION}
 
-# Copy existing application directory permissions
-COPY --chown=www:www . /var/www/html
+ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
-# Set ownership for application files
-RUN chown -R www:www /var/www/html
-
-# Change current user to www
-USER www
-
-# Expose port 8080 and start php-fpm server
+# Expose port 9000 and start php-fpm server
 EXPOSE 9000
+
 CMD ["php-fpm"]
