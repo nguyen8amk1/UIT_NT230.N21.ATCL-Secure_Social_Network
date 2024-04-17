@@ -23,13 +23,13 @@ install:
 	docker-compose exec php php artisan key:generate
 
 	# Run migration and seeder, continue to next command even if error occurs
-	docker-compose exec php php artisan migrate --seed || true
+	# docker-compose exec php php artisan migrate --seed || true
 
 	# Create symbolic link
 	docker-compose exec php php artisan storage:link || true
 
 	# Seed dummy data
-	docker-compose exec php php artisan db:seed --class="DummyDataSeeder"
+	# docker-compose exec php php artisan db:seed --class="DummyDataSeeder"
 
 	# Clear temporary files
 	docker-compose exec php php artisan clean:temp
