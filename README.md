@@ -1,63 +1,83 @@
 # SECURE SOCIAL MEDIA WEBSITE
-## INSTALLATION
-Set the configuration file using the command 
+## INSTALLATION WITH DOCKER
+In the root directory, use the following command (Makefile is executed):
+
+```
+make install
+```
+
+Makefile is a text file containing rules to automate the compilation and building process of software.
+
+Then go to the .env file and edit `DB_HOST=127.0.0.1` -> `DB_HOST=mysql` because when running outside of workspace container, the MySQL container is accessible on 127.0.0.1, but when you're in the workspace container, 127.001 is relative to the container itself, so container will try to connect to its own localhost.
+
+![code](https://github.com/nguyen8amk1/UIT_NT230.N21.ATCL-Secure_Social_Network/assets/112185647/24c6c42d-8267-4097-8db8-ef28d53e5555)
+
+Then type the command
+
+**Run migration and seeder, continue to next command even if error occurs**
+
+```
+docker-compose exec php php artisan migrate --seed || true
+```
+
+**Seed dummy data**
+
+```
+docker-compose exec php php artisan db:seed --class="DummyDataSeeder"
+```
+
+## INSTALLATION WITHOUT DOCKER
+### Set the configuration file using the command 
+
+**Copy file .env.example -> .env**
 
 ```
 cp .env.example .env
 ```
 
-Update version laravel (9.52.16)
+**Update version laravel (9.52.16)**
 
 ```
 composer update
 ```
 
-Install all required packages via composer
+**Install all required packages via composer**
 
 ```
 composer install
 ```
 
-Run the migration and seeder
+**Run the migration and seeder**
 
 ```
 php artisan migrate --seed
 ```
 
-```
-php artisan setup
-```
-
-Install all dependencies
+**Install all required packages via nodejs**
 
 ```
 npm install
 ```
 
-Create symbolic link
+**Create symbolic link**
 
 ```
 php artisan storage:link
 ```
 
-## HOW TO USE
-Creates dummy data using faker library.
-
-```
-php artisan db:seed --class="DummyDataSeeder"
-```
-
-```
-php artisan setup:dummy
-```
-
-Generates a security key for your Laravel application
+**Generates a security key for your Laravel application**
 
 ```
 php artisan key:generate 
 ```
 
-Clear Temporary Files
+**Creates dummy data using faker library**
+
+```
+php artisan db:seed --class="DummyDataSeeder"
+```
+
+**Clear Temporary Files**
 
 ```
 php artisan clean:temp
