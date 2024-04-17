@@ -1,6 +1,6 @@
 # SECURE SOCIAL MEDIA WEBSITE
 ## INSTALLATION WITH DOCKER
-In the root directory, use the following command (Makefile is executed):
+### In the root directory, use the following command (Makefile is executed)
 
 ```
 make install
