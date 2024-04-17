@@ -15,8 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        // Call the RoleSeeder to seed roles
         $this->call(RoleSeeder::class);
-        
-        User::factory()->create(['email' => 'admin@gmail.com', 'email_verified_at' => null, 'role_id' => 2]);
+
+        // Create a user with specified attributes
+        User::factory()->create([
+            'email' => 'admin@gmail.com', // User's email
+            'email_verified_at' => null, // Email verification date (null for now)
+            'role_id' => 2, // User's role ID
+        ]);
     }
 }

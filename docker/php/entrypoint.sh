@@ -1,32 +1,32 @@
-#!/bin/bash
+# #!/bin/bash
 
-# Copy environment file
-cp .env.example .env || true
+# # Copy environment file
+# cp .env.example .env
 
-# Update composer
-composer update || true
+# # Update composer
+# composer update
 
-# Install composer dependencies
-composer install || true
+# # Install composer dependencies
+# composer install
 
-# Install npm packages
-npm install || true
+# # Install npm packages
+# npm install
 
-# Generate Laravel application key
-php artisan key:generate || true
+# # Generate Laravel application key
+# php artisan key:generate
 
-# Run migration and seeder, continue to next command even if error occurs
-php artisan migrate --seed || true
+# # Run migration and seeder, continue to next command even if error occurs
+# php artisan migrate --seed
 
-# Create symbolic link
-php artisan storage:link || true
+# # Create symbolic link
+# php artisan storage:link
 
-# Seed dummy data
-php artisan db:seed --class="DummyDataSeeder" || true
+# # Seed dummy data
+# php artisan db:seed --class="DummyDataSeeder"
 
-# Start the Laravel project
-# php artisan serve --host=localhost
-# php artisan serve
+# # Start the Laravel project
+# # php artisan serve --host=localhost
+# # php artisan serve
 
-# Clear temporary files
-php artisan clean:temp || true
+# # Clear temporary files
+# php artisan clean:temp
