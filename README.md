@@ -41,10 +41,10 @@ passwd: password
 
 | Container   | Port       | Link                               |
 |-------------|------------|------------------------------------|
-| php-fpm     | 9000       | 9000(default), 8080 (custom) http://localhost:8080 |
-| nginx       | 80         | 80 http://localhost:80             |
+| php-fpm     | 9000(default), 8080 (custom) | http://localhost:8080 |
+| nginx       | 80         | http://localhost:80             |
 | mysql       | 3307       | null                               |
-| phpmyadmin  | 8081       | 8081 http://localhost:8081         |
+| phpmyadmin  | 8081       | http://localhost:8081         |
 
 ## INSTALLATION WITHOUT DOCKER
 ### Set the configuration file using the command 
