@@ -1,6 +1,11 @@
 # SECURE SOCIAL MEDIA WEBSITE
 ## INSTALLATION WITH DOCKER
 ### In the root directory, use the following command (Makefile is executed)
+**Copy file .env.example -> .env**
+
+```
+cp .env.example .env
+```
 
 ```
 make install
