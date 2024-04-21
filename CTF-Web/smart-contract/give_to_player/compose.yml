@@ -1,0 +1,13 @@
+services:
+  web:
+    build: .
+    ports:
+      - 8004:80
+    restart: always
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: 123456
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql

@@ -1,0 +1,11 @@
+{
+    "name": "autobot",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "puppeteer": "^21.7.0"
+    }
+}

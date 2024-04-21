@@ -1,0 +1,34 @@
+services:
+  php:
+    build: src
+    ports:
+      - 2808:80
+    environment:
+      - ADMIN_PW
+      - ADMIN_EMAIL
+      - ADMIN_NAME
+    depends_on:
+      - db
+  db:
+    image: mysql
+    restart: unless-stopped
+    volumes:
+      - ./config/my.cnf:/etc/mysql/my.cnf
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_PASSWORD
+      - MYSQL_USER
+      - MYSQL_SERVER
+  bot:
+    build: bot
+    ports:
+      - 2809:2809
+    environment:
+      - ADMIN_PW
+      - ADMIN_KEY
+      - ADMIN_EMAIL
+      - URL
+      - FLAG
+    depends_on:
+      - php

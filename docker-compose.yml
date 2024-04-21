@@ -165,8 +165,7 @@ services:
 #Docker Networks
 networks:
   app-network:
-    driver: bridge
+    # driver: bridge
 
 volumes:
   db_data: {}
-  # phpmyadmin_data: {}

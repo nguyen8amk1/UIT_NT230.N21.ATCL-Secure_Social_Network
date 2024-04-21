@@ -1,0 +1,21 @@
+services:
+  web:
+    build: ./web
+    ports:
+      - 8001:80
+    restart: always
+    volumes:
+      - ./flag.txt:/flag.txt
+  manager:
+    build: ./manager
+    restart: always
+  bot:
+    build: ./bot
+    restart: always
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: 123456
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
