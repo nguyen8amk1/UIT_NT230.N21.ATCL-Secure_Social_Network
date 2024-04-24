@@ -14,6 +14,9 @@ install:
 
 	# Install npm packages
 	docker-compose exec php npm install
+	
+	# Install mix manifest (The Mix manifest does not exist)
+	docker-compose exec php npm run dev
 
 	# Clear config cache
 	docker-compose exec php php artisan config:clear
