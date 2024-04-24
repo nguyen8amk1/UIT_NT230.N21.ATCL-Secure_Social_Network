@@ -34,7 +34,7 @@ docker-compose exec php php artisan db:seed --class="DummyDataSeeder"
 **Next time you run it, you just need**
 
 ```
-docker compose up -d
+docker-compose up -d
 ```
 
 **Account**
