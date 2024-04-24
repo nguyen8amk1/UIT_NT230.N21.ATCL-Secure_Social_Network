@@ -96,6 +96,10 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN sudo chmod o+w ./storage/ -R
+
+RUN sudo chown www-data:www-data -R ./storage
+
 RUN docker-php-ext-install mysqli pdo pdo_mysql    
 
 # Install composer
@@ -117,3 +121,5 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 EXPOSE 9000
 
 CMD ["php-fpm"]
+
+
