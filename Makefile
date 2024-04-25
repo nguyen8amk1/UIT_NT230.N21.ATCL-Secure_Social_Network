@@ -4,6 +4,9 @@ install:
 	# Copy environment file
 	docker-compose exec php cp variables.env .env || true
 
+	# Update DB_HOST in .env
+	docker-compose exec php sed -i 's/DB_HOST=127.0.0.1/DB_HOST=mysql/g' .env || true	
+	
 	# Update composer
 	docker-compose exec php composer update
 
@@ -14,6 +17,10 @@ install:
 
 	# Install npm packages
 	docker-compose exec php npm install
+	
+	# Add root permition
+	docker-compose exec php chown -R root:root /var/www/html/
+	docker-compose exec php chmod -R u+rwx,g+rwx,o+rwx /var/www/html/
 	
 	# Install mix manifest (The Mix manifest does not exist)
 	docker-compose exec php npm run dev

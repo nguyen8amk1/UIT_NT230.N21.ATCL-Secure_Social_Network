@@ -96,12 +96,6 @@ RUN apt-get update && apt-get install -y \
     curl \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN sudo chmod o+w ./storage/ -R
-
-RUN sudo chown www-data:www-data -R ./storage
-
-RUN sudo chmod -R 777 bootstrap/cache/
-
 RUN docker-php-ext-install mysqli pdo pdo_mysql    
 
 # Install composer
