@@ -7,11 +7,11 @@
 cp .env.example .env
 ```
 
+Makefile is a text file containing rules to automate the compilation and building process of software, use `root user` to run `Makefile`.
+
 ```
 make install
 ```
-
-Makefile is a text file containing rules to automate the compilation and building process of software.
 
 **Next time you run it, you just need**
 
