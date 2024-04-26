@@ -13,24 +13,6 @@ make install
 
 Makefile is a text file containing rules to automate the compilation and building process of software.
 
-Then go to the .env file and edit `DB_HOST=127.0.0.1` -> `DB_HOST=mysql` because when running outside of workspace container, the MySQL container is accessible on 127.0.0.1, but when you're in the workspace container, 127.001 is relative to the container itself, so container will try to connect to its own localhost.
-
-![code](https://github.com/nguyen8amk1/UIT_NT230.N21.ATCL-Secure_Social_Network/assets/112185647/24c6c42d-8267-4097-8db8-ef28d53e5555)
-
-Then type the command
-
-**Run migration and seeder, continue to next command even if error occurs**
-
-```
-docker-compose exec php php artisan migrate --seed || true
-```
-
-**Seed dummy data**
-
-```
-docker-compose exec php php artisan db:seed --class="DummyDataSeeder"
-```
-
 **Next time you run it, you just need**
 
 ```
