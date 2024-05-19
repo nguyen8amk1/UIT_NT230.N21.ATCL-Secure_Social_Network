@@ -34,12 +34,16 @@ passwd: password
 | phpmyadmin  | 8081       | http://localhost:8081         |
 
 ## INSTALLATION WITHOUT DOCKER
+You must run `myssql` in `xampp`
+
+![image](https://github.com/nguyen8amk1/UIT_NT230.N21.ATCL-Secure_Social_Network/assets/112185647/b0f8f860-98ac-4921-9739-6cdbd4d043d1)
+
 ### Set the configuration file using the command 
 
 **Copy file .env.example -> .env**
 
 ```
-cp .env.example .env
+cp .env.example.nodocker .env
 ```
 
 **Update version laravel (9.52.16)**
@@ -64,6 +68,10 @@ php artisan migrate --seed
 
 ```
 npm install
+```
+
+```
+npm run dev
 ```
 
 **Create symbolic link**
