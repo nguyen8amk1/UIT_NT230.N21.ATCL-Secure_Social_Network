@@ -117,3 +117,5 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 EXPOSE 9000
 
 CMD ["php-fpm"]
+
+
