@@ -21,7 +21,7 @@
 #     build:
 #       context: ./docker/php
 #     ports:
-#       - "8001:80"    
+#       - "8001:80"
 #     environment:
 #       - DB_PORT=3306
 #       - DB_HOST=mysql
