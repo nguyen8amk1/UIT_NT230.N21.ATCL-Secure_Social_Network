@@ -11,12 +11,12 @@ use App\Models\Comment;
 class CommentSeeder extends Seeder
 {
     protected $faker;
-    
+
     protected $users;
-    
+
     protected $userCount;
-    
-    
+
+
     /**
      * Run the database seeds.
      *
@@ -29,12 +29,12 @@ class CommentSeeder extends Seeder
         $this->usersCount = $users->count();
         $this->users = $users->toArray();
         $posts = Post::all();
-        
+
         foreach ($posts as $post) {
             $this->commentPost($post);
         }
     }
-    
+
     private function commentPost($post)
     {
         $num = $this->faker->numberBetween(0, $this->usersCount);
@@ -44,7 +44,7 @@ class CommentSeeder extends Seeder
         }
         return true;
     }
-    
+
     private function commentPostByUser($post, $user)
     {
         Comment::factory()->create(['post_id'=>$post->id, 'user_id' => $user['id']]);

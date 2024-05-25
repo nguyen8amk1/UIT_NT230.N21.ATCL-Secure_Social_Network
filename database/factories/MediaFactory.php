@@ -22,11 +22,16 @@ class MediaFactory extends Factory
      */
     public function definition()
     {
+        $jsonPath = database_path('factories/media.json');
+        $media = json_decode(file_get_contents($jsonPath), true);
+
+        $m = $this->faker->randomElement($media);
+
         return [
             'post_id' => function () {
                 return Post::factory()->create()->id;
             },
-            'path' => '/post-photos/' . $this->faker->image('storage/app/public/post-photos', 640, 480, 'social media', false),
+            'path' => '/post-photos/' . $this->faker->image('storage/app/public/post-photos', 640, 480, "hello world", false),
             'is_image' => true,
         ];
     }

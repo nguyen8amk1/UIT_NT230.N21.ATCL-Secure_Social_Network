@@ -22,10 +22,15 @@ class PostFactory extends Factory
      */
     public function definition()
     {
+        $jsonPath = database_path('factories/media.json');
+        $media = json_decode(file_get_contents($jsonPath), true);
+
+        $m = $this->faker->randomElement($media);
+
         return [
-            'title' => $this->faker->word(),
-            'location' => $this->faker->streetName(),
-            'body' => $this->faker->sentence(),
+            'title' => $m['title'],
+            'location' => $m['location'],
+            'body' => $m['body_sentence'],
             'user_id' => function () {
                 return User::factory()->create()->id;
             },

@@ -13,18 +13,24 @@ class CommentFactory extends Factory
      * @var string
      */
     protected $model = Comment::class;
-
     /**
      * Define the model's default state.
      *
      * @return array
+     }
      */
     public function definition()
     {
+        $jsonPath = database_path('factories/comments.json');
+        $comments = json_decode(file_get_contents($jsonPath), true);
+
+        $comment = $this->faker->randomElement($comments);
+
         return [
             'post_id' => 1,
             'user_id' => 1,
-            'comment' => $this->faker->sentence(),
+            //'comment' => $this->faker->sentence(),
+            'comment' => $comment['comment'],
         ];
     }
 }
