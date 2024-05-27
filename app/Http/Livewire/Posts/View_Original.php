@@ -17,12 +17,19 @@ class View extends Component
     use WithPagination;
 
     public $comments = [];
+
     public $comment;
+
     public $type;
+
     public $queryType;
+
     public $postId;
+
     public $deletePostId;
+
     public $isOpenCommentModal = false;
+
     public $isOpenDeletePostModal = false;
 
     public function mount($type = null)
@@ -40,42 +47,48 @@ class View extends Component
     public function incrementLike(Post $post)
     {
         $like = Like::where('user_id', Auth::id())
-                    ->where('post_id', $post->id);
+            ->where('post_id', $post->id);
 
-        if (!$like->count()) {
-            Like::create([
+        if (! $like->count()) {
+            $new = Like::create([
                 'post_id' => $post->id,
                 'user_id' => Auth::id(),
             ]);
-        } else {
-            $like->delete();
+
+            return true;
         }
+        $like->delete();
     }
 
     public function comments($post)
     {
         $post = Post::with(['comments.user' => function ($query) {
             $query->select('id', 'name');
-        }])->findOrFail($post);
-
+        },
+        ])->find($post);
         $this->postId = $post->id;
         $this->resetValidation('comment');
         $this->isOpenCommentModal = true;
         $this->setComments($post);
+        return true;
     }
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     public function createComment(Post $post)
     {
-        // Removing validation for demonstration purposes
-        // $validatedData = Validator::make(
-        //     ['comment' => $this->comment],
-        //     ['comment' => 'required|max:5000']
-        // )->validate();
+        $validatedData = Validator::make(
+            ['comment' => $this->comment],
+            ['comment' => 'required|max:5000']
+        )->validate();
 
         Comment::create([
             'user_id' => Auth::id(),
             'post_id' => $post->id,
-            'comment' => $this->comment, // No sanitization
+            'comment' => $validatedData['comment'],
         ]);
 
         session()->flash('comment.success', 'Comment created successfully');
@@ -83,12 +96,14 @@ class View extends Component
         $this->setComments($post);
         $this->comment = '';
 
+        //$this->isOpenCommentModal = false;
         return redirect()->back();
     }
 
     public function setComments($post)
     {
         $this->comments = $post->comments;
+        return true;
     }
 
     public function showDeletePostModal(Post $post)
@@ -99,62 +114,58 @@ class View extends Component
 
     public function deletePost(Post $post)
     {
-        // Removing authorization for demonstration purposes
-        // $response = Gate::inspect('delete', $post);
+        $response = Gate::inspect('delete', $post);
 
-        // if ($response->allowed()) {
-        try {
-            $post->delete();
-            session()->flash('success', 'Post deleted successfully');
-        } catch (Exception $e) {
-            session()->flash('error', 'Cannot delete post: ' . $e->getMessage());
+        if ($response->allowed()) {
+            try {
+                $post->delete();
+                session()->flash('success', 'Post deleted successfully');
+            } catch (Exception $e) {
+                session()->flash('error', 'Cannot delete post');
+            }
+        } else {
+            session()->flash('error', $response->message());
         }
-        // } else {
-        //     session()->flash('error', $response->message());
-        // }
-
         $this->isOpenDeletePostModal = false;
         return redirect()->back();
     }
 
     public function deleteComment(Post $post, Comment $comment)
     {
-        // Removing authorization for demonstration purposes
-        // $response = Gate::inspect('delete', [$comment, $post]);
+        $response = Gate::inspect('delete', [$comment, $post]);
 
-        // if ($response->allowed()) {
-        try {
+        if ($response->allowed()) {
             $comment->delete();
+            $this->isOpenCommentModal = false;
             session()->flash('success', 'Comment deleted successfully');
-        } catch (Exception $e) {
-            session()->flash('comment.error', 'Cannot delete comment: ' . $e->getMessage());
+        } else {
+            session()->flash('comment.error', $response->message());
         }
-        // } else {
-        //     session()->flash('comment.error', $response->message());
-        // }
 
-        $this->isOpenCommentModal = false;
         return redirect()->back();
     }
 
     private function setQuery()
     {
-        $user = Auth::user();
-
-        $query = Post::withCount(['likes', 'comments'])
-            ->with(['userLikes', 'postImages', 'user' => function ($query) {
+        if (! empty($this->queryType) && $this->queryType === 'me') {
+            $posts = Post::withCount(['likes', 'comments'])->where('user_id', Auth::id())->with(['userLikes', 'postImages', 'user' => function ($query) {
                 $query->select(['id', 'name', 'username', 'profile_photo_path']);
-            }])
-            ->latest();
-
-        if ($this->queryType === 'me') {
-            $query->where('user_id', $user->id);
-        } elseif ($this->queryType === 'followers') {
-            $userIds = $user->followings()->pluck('follower_id')->push($user->id);
-            $query->whereIn('user_id', $userIds);
+            },
+            ])->latest()->paginate(10);
+        } elseif (! empty($this->queryType) && $this->queryType === 'followers') {
+            $userIds = Auth::user()->followings()->pluck('follower_id');
+            $userIds[] = Auth::id();
+            $posts = Post::withCount(['likes', 'comments'])->whereIn('user_id', $userIds)->with(['userLikes', 'postImages', 'user' => function ($query) {
+                $query->select(['id', 'name', 'username', 'profile_photo_path']);
+            },
+            ])->latest()->paginate(10);
+        } else {
+            $posts = Post::withCount(['likes', 'comments'])->with(['userLikes', 'postImages', 'user' => function ($query) {
+                $query->select(['id', 'name', 'username', 'profile_photo_path']);
+            },
+            ])->latest()->paginate(10);
         }
 
-        return $query->paginate(10);
+        return $posts;
     }
 }
-
