@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Livewire\Posts;
 
 use App\Models\Media;
@@ -56,17 +57,7 @@ class Create extends Component
         }
 
         $originalFilename = $this->file->getClientOriginalName();
-        #$path = $this->file->store('post-photos', 'public');
         $path = $this->file->storeAs('post-photos', $originalFilename, 'public');
-
-        /* // Get the original filename */
-        /* $originalFilename = $this->file->getClientOriginalName(); */
-        /**/
-        /* // Move the uploaded file to the desired directory */
-        /* $path = $this->file->move(public_path('storage/post-photos'), $originalFilename); */
-        /**/
-        /* // Get the relative path to the moved file */
-        /* $relativePath = 'storage/post-photos/' . $originalFilename; */
 
         Media::create([
             'post_id' => $post->id,
@@ -88,4 +79,3 @@ class Create extends Component
         return request()->ip(); // it will return server ip when no client ip found
     }
 }
-
