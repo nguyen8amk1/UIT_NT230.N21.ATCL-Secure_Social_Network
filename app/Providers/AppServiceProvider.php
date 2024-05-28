@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Model::preventLazyLoading(! app()->isProduction());
+        // Model::preventLazyLoading(! app()->isProduction()); //only production environments
+        Model::preventLazyLoading(false); // All environments
         Blade::withoutDoubleEncoding();
     }
 }

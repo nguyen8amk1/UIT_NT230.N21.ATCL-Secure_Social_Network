@@ -6,12 +6,12 @@
 
     <x-slot name="content">
 
-    <form wire:submit.prevent="createComment({{ $postId }})" >
-        <div class="mt-4">
-            <textarea class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block" wire:model.lazy="comment"
-                        placeholder="{{ __('Your comment') }}"
-                        ></textarea>
-        </div>
+        <form wire:submit.prevent="createComment({{ $postId }})">
+            <div class="mt-4">
+                <textarea
+                    class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block"
+                    wire:model.lazy="comment" placeholder="{{ __('Your comment') }}"></textarea>
+            </div>
     </x-slot>
 
     <x-slot name="footer">
@@ -26,39 +26,38 @@
     </form>
 
     <x-slot name="comments">
-    @forelse($comments as $comment)
-    <div class="flex space-x-2 my-3">
-        <div class="block">
-          <div class="bg-gray-100 w-auto rounded-xl px-2 pb-2">
-            <div class="font-medium">
-              <a href="#" class="hover:underline text-sm">
-                <span class="text-xs font-semibold">{{ $comment->user->name }}</span>
-              </a>
+        @forelse($comments as $comment)
+            <div class="flex space-x-2 my-3">
+                <div class="block">
+                    <div class="bg-gray-100 w-auto rounded-xl px-2 pb-2">
+                        <div class="font-medium">
+                            <a href="#" class="hover:underline text-sm">
+                                <span class="text-xs font-semibold">{{ $comment->user->name }}</span>
+                            </a>
+                        </div>
+                        <div class="text-xs">
+                            {!! $comment->comment !!}
+                        </div>
+                    </div>
+                    <div class="flex justify-start items-center text-xs w-full">
+                        <div class="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
+                            <a href="#" class="hover:underline">
+                                <small>Like</small>
+                            </a>
+                            <small class="self-center">.</small>
+                            <button class="" wire:click="deleteComment({{ $post->id }}, {{ $comment->id }})">
+                                <small>Delete</small>
+                            </button>
+                            <small class="self-center">.</small>
+                            <a href="#" class="hover:underline">
+                                <small>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="text-xs">
-                {!! $comment->comment  !!}
-            </div>
-          </div>
-          <div class="flex justify-start items-center text-xs w-full">
-            <div class="font-semibold text-gray-700 px-2 flex items-center justify-center space-x-1">
-              <a href="#" class="hover:underline">
-                <small>Like</small>
-              </a>
-            <small class="self-center">.</small>
-              <button class="" wire:click="deleteComment({{ $post->id }}, {{ $comment->id }})">
-                <small>Delete</small>
-              </button>
-            <small class="self-center">.</small>
-              <a href="#" class="hover:underline">
-                <small>{{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</small>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      @empty
-             No Comments found
-      @endforelse
-      </x-slot>
+        @empty
+            No Comments found
+        @endforelse
+    </x-slot>
 </x-jet-dialog-modal>
-
