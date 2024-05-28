@@ -58,4 +58,22 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
     }
+
+    /**
+     * Best patching for this vulnerability
+     * 
+     * 
+     *    protected function configureRateLimiting()
+     *{
+     *    RateLimiter::for('api', function (Request $request) {
+     *        return RateLimiter::perMinute(60)
+     *            ->by(optional($request->user())->id ?: $request->ip())
+     *            ->response(function () {
+     *                return response('Too many requests. Please try again in 5 minutes.', 429);
+     *            })
+     *            //Block this IP in 5 minutes
+     *            ->lockout(5);
+     *    });
+     *} 
+     */
 }
