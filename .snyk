@@ -1,4 +1,4 @@
-# Snyk (https://snyk.io) policy file
+# Snyk (https://snyk.io) policy file.
 exclude:
  global:
    - CTF-Web/** 
