@@ -1,4 +1,7 @@
 # SECURE SOCIAL MEDIA WEBSITE
+You can see all the reports and how we implemented the project in the folder **[Reports](https://github.com/nguyen8amk1/UIT_NT230.N21.ATCL-Secure_Social_Network/tree/main/Report)**
+
+The CTF challenge report can be viewed here **[CTF-Report](https://github.com/nguyen8amk1/UIT_NT230.N21.ATCL-Secure_Social_Network/tree/main/CTF-Web)**
 ## INSTALLATION WITH DOCKER
 ### In the root directory, use the following command (Makefile is executed)
 **Copy file .env.example -> .env**
